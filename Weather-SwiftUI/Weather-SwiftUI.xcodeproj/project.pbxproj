@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		3FB825C93045BC3A007417ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3FB825AB3045B9E9007417ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FB825B23045B9E9007417ED;
+			remoteInfo = "Weather-SwiftUI";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		3FB825B33045B9E9007417ED /* Weather-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FB825C53045BC3A007417ED /* Weather-SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Weather-SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = "Weather-SwiftUI";
 			sourceTree = "<group>";
 		};
+		3FB825C63045BC3A007417ED /* Weather-SwiftUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Weather-SwiftUITests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3FB825B03045B9E9007417ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FB825C23045BC3A007417ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				3FB825B53045B9E9007417ED /* Weather-SwiftUI */,
+				3FB825C63045BC3A007417ED /* Weather-SwiftUITests */,
 				3FB825B43045B9E9007417ED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				3FB825B33045B9E9007417ED /* Weather-SwiftUI.app */,
+				3FB825C53045BC3A007417ED /* Weather-SwiftUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = 3FB825B33045B9E9007417ED /* Weather-SwiftUI.app */;
 			productType = "com.apple.product-type.application";
 		};
+		3FB825C43045BC3A007417ED /* Weather-SwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FB825CB3045BC3A007417ED /* Build configuration list for PBXNativeTarget "Weather-SwiftUITests" */;
+			buildPhases = (
+				3FB825C13045BC3A007417ED /* Sources */,
+				3FB825C23045BC3A007417ED /* Frameworks */,
+				3FB825C33045BC3A007417ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3FB825CA3045BC3A007417ED /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3FB825C63045BC3A007417ED /* Weather-SwiftUITests */,
+			);
+			name = "Weather-SwiftUITests";
+			packageProductDependencies = (
+			);
+			productName = "Weather-SwiftUITests";
+			productReference = 3FB825C53045BC3A007417ED /* Weather-SwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					3FB825B23045B9E9007417ED = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					3FB825C43045BC3A007417ED = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 3FB825B23045B9E9007417ED;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				3FB825B23045B9E9007417ED /* Weather-SwiftUI */,
+				3FB825C43045BC3A007417ED /* Weather-SwiftUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3FB825B13045B9E9007417ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FB825C33045BC3A007417ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FB825C13045BC3A007417ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3FB825CA3045BC3A007417ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FB825B23045B9E9007417ED /* Weather-SwiftUI */;
+			targetProxy = 3FB825C93045BC3A007417ED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3FB825BC3045B9EB007417ED /* Debug */ = {
@@ -310,6 +385,48 @@
 			};
 			name = Release;
 		};
+		3FB825CC3045BC3A007417ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 588XQ54KC9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.pvakalis.Weather-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Weather-SwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Weather-SwiftUI";
+			};
+			name = Debug;
+		};
+		3FB825CD3045BC3A007417ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 588XQ54KC9;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.pvakalis.Weather-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Weather-SwiftUI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Weather-SwiftUI";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +444,15 @@
 			buildConfigurations = (
 				3FB825BF3045B9EB007417ED /* Debug */,
 				3FB825C03045B9EB007417ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FB825CB3045BC3A007417ED /* Build configuration list for PBXNativeTarget "Weather-SwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FB825CC3045BC3A007417ED /* Debug */,
+				3FB825CD3045BC3A007417ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
