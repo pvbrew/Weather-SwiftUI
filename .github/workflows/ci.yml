@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PROJECT_PATH: Weather-SwiftUI/Weather-SwiftUI.xcodeproj
+  SCHEME: Weather-SwiftUI
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select latest Xcode
+        run: |
+          LATEST_XCODE=$(ls -d /Applications/Xcode_*.app 2>/dev/null | sort -V | tail -n 1)
+          if [ -n "$LATEST_XCODE" ]; then
+            sudo xcode-select -s "$LATEST_XCODE"
+          fi
+          xcodebuild -version
+
+      - name: Resolve simulator destination
+        id: destination
+        run: |
+          xcrun simctl list devices available --json > devices.json
+          python3 - <<'PYEOF' >> "$GITHUB_OUTPUT"
+          import json
+
+          with open("devices.json") as f:
+              data = json.load(f)["devices"]
+
+          def parse_version(runtime_key):
+              # e.g. "com.apple.CoreSimulator.SimRuntime.iOS-26-5" -> (26, 5)
+              suffix = runtime_key.rsplit(".iOS-", 1)[-1]
+              parts = suffix.split("-")
+              return tuple(int(p) for p in parts if p.isdigit())
+
+          ios_runtimes = {
+              k: v for k, v in data.items()
+              if "SimRuntime.iOS" in k and v
+          }
+          if not ios_runtimes:
+              raise SystemExit("No available iOS simulator runtimes found")
+
+          best_runtime = max(ios_runtimes, key=parse_version)
+          devices = [d for d in ios_runtimes[best_runtime] if d.get("isAvailable", True) and d["name"].startswith("iPhone")]
+          if not devices:
+              raise SystemExit(f"No iPhone simulators available for runtime {best_runtime}")
+
+          # Prefer a plain (non-Pro/Max/Plus/e/Air) iPhone if present, else take the first.
+          plain = [d for d in devices if d["name"].split() == ["iPhone", d["name"].split()[-1]] and d["name"].split()[-1].isdigit()]
+          chosen = plain[0] if plain else devices[0]
+
+          version = ".".join(str(p) for p in parse_version(best_runtime))
+          print(f"os={version}")
+          print(f"device={chosen['name']}")
+          PYEOF
+
+      - name: Show available schemes
+        run: xcodebuild -list -project "$PROJECT_PATH"
+
+      - name: Build and test
+        run: |
+          set -o pipefail
+          rm -rf TestResults.xcresult
+          if command -v xcbeautify >/dev/null 2>&1; then
+            xcodebuild clean test \
+              -project "$PROJECT_PATH" \
+              -scheme "$SCHEME" \
+              -destination "platform=iOS Simulator,name=${{ steps.destination.outputs.device }},OS=${{ steps.destination.outputs.os }}" \
+              -resultBundlePath TestResults.xcresult \
+              | xcbeautify
+          else
+            xcodebuild clean test \
+              -project "$PROJECT_PATH" \
+              -scheme "$SCHEME" \
+              -destination "platform=iOS Simulator,name=${{ steps.destination.outputs.device }},OS=${{ steps.destination.outputs.os }}" \
+              -resultBundlePath TestResults.xcresult
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults.xcresult
+          retention-days: 7
