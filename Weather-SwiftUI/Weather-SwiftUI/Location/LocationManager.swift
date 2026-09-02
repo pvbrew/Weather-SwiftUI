@@ -25,13 +25,11 @@ final class LocationManager: NSObject, ObservableObject {
 	// MARK: - Functions
 	func checkLocationAuthorisation() {
 		manager.delegate = self
-		manager.startUpdatingLocation()
-		
+
 		switch manager.authorizationStatus {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
 			manager.startUpdatingLocation()
-			break
 		case .denied, .restricted:
 			isAuthorisationDenied = true
 		case .notDetermined:
