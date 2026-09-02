@@ -15,7 +15,7 @@ final class LocationManager: NSObject, ObservableObject {
 	@Published var isAuthorisationDenied = false
 	
 	// MARK: - Properties
-	var manager: CLLocationManageable
+	private var manager: CLLocationManageable
 	
 	// MARK: - Intializers
 	init(manager: CLLocationManageable = CLLocationManager()) {
