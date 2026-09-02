@@ -21,7 +21,7 @@ final class MockCLLocationManager: CLLocationManageable {
 		hasRequestedWhenInUseAuthorization = true
 	}
 	
-	func startUpdatingLocation() {
+	func requestLocation() {
 		location = CLLocation(latitude: 37.7749, longitude: -122.4194)
 	}
 }

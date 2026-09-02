@@ -15,7 +15,7 @@ protocol CLLocationManageable {
 	
 	// MARK: - Functions
 	func requestWhenInUseAuthorization()
-	func startUpdatingLocation()
+	func requestLocation()
 }
 
 extension CLLocationManager: CLLocationManageable {}

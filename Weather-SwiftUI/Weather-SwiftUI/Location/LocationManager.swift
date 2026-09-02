@@ -13,6 +13,7 @@ final class LocationManager: NSObject, ObservableObject {
 	// MARK: - Published properties
 	@Published var lastKnownLocation: CLLocationCoordinate2D?
 	@Published var isAuthorisationDenied = false
+	@Published var errorAccessingLocation: Error?
 	
 	// MARK: - Properties
 	private var manager: CLLocationManageable
@@ -29,7 +30,7 @@ final class LocationManager: NSObject, ObservableObject {
 		switch manager.authorizationStatus {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
-			manager.startUpdatingLocation()
+			manager.requestLocation()
 		case .denied, .restricted:
 			isAuthorisationDenied = true
 		case .notDetermined:
@@ -51,5 +52,12 @@ extension LocationManager: CLLocationManagerDelegate {
 		didUpdateLocations locations: [CLLocation]
 	) {
 		lastKnownLocation = locations.first?.coordinate
+	}
+
+	func locationManager(
+		_ manager: CLLocationManager,
+		didFailWithError error: Error
+	) {
+		errorAccessingLocation = error
 	}
 }
