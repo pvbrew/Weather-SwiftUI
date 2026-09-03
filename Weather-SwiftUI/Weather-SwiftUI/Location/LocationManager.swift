@@ -21,12 +21,12 @@ final class LocationManager: NSObject, ObservableObject {
 	// MARK: - Intializers
 	init(manager: CLLocationManageable = CLLocationManager()) {
 		self.manager = manager
+		super.init()
+		self.manager.delegate = self
 	}
 	
 	// MARK: - Functions
 	func checkLocationAuthorisation() {
-		manager.delegate = self
-
 		switch manager.authorizationStatus {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
