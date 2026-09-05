@@ -1,0 +1,7 @@
+{
+	"time": "iso8601",
+	"interval": "seconds",
+	"temperature_2m": "°C",
+	"weather_code": "wmo code",
+	"is_day": ""
+}
