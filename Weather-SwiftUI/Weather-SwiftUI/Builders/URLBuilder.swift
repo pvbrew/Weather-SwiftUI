@@ -9,11 +9,11 @@ import Foundation
 import CoreLocation
 
 protocol URLBuildable {
-	func buildForCurrentWeather(in coordinates: CLLocationCoordinate2D) -> URL
+	func buildForCurrentWeather(at coordinates: CLLocationCoordinate2D) -> URL
 }
 
 struct URLBuilder: URLBuildable {
-	func buildForCurrentWeather(in coordinates: CLLocationCoordinate2D) -> URL {
+	func buildForCurrentWeather(at coordinates: CLLocationCoordinate2D) -> URL {
 		var components = URLComponents()
 		components.scheme = "https"
 		components.host = "api.open-meteo.com"

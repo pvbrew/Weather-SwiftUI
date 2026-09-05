@@ -10,7 +10,7 @@ import CoreLocation
 @testable import Weather_SwiftUI
 
 final class URLBuilderTests: XCTestCase {
-	func testURLBuilder_whenBuildingForCurrentWeatherInCoordinates_shouldReturnTheExpectedURL() throws {
+	func testURLBuilder_whenBuildingForCurrentWeatherAtCoordinates_shouldReturnTheExpectedURL() throws {
 		// Given
 		let coordinates = CLLocationCoordinate2D(
 			latitude: 37.9838,
@@ -19,7 +19,7 @@ final class URLBuilderTests: XCTestCase {
 		let sut = URLBuilder()
 		
 		// When
-		let url = sut.buildForCurrentWeather(in: coordinates)
+		let url = sut.buildForCurrentWeather(at: coordinates)
 		
 		// Then
 		let resultComponents = try XCTUnwrap(
