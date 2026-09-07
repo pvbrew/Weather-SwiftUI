@@ -30,7 +30,6 @@ final class LocationManager: NSObject, ObservableObject {
 		switch manager.authorizationStatus {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
-			manager.requestLocation()
 		case .denied, .restricted:
 			isAuthorisationDenied = true
 		case .notDetermined:
@@ -38,6 +37,10 @@ final class LocationManager: NSObject, ObservableObject {
 		@unknown default:
 			break
 		}
+	}
+	
+	func requestLocation() {
+		manager.requestLocation()
 	}
 }
 

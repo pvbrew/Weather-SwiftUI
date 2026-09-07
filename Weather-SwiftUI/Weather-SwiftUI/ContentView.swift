@@ -25,7 +25,7 @@ struct ContentView: View {
 			
 			
 			Button("Get location") {
-				locationManager.checkLocationAuthorisation()
+				locationManager.requestLocation()
 			}
 			.buttonStyle(.borderedProminent)
 			

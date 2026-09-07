@@ -22,14 +22,6 @@ final class LocationManagerTests: XCTestCase {
 		
 		// Then
 		XCTAssertFalse(sut.isAuthorisationDenied)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.latitude,
-			37.7749
-		)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.longitude,
-			-122.4194
-		)
 		XCTAssertFalse(mockCLLocationManager.hasRequestedWhenInUseAuthorization)
 	}
 	
@@ -44,14 +36,6 @@ final class LocationManagerTests: XCTestCase {
 		
 		// Then
 		XCTAssertFalse(sut.isAuthorisationDenied)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.latitude,
-			37.7749
-		)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.longitude,
-			-122.4194
-		)
 		XCTAssertFalse(mockCLLocationManager.hasRequestedWhenInUseAuthorization)
 	}
 	
@@ -110,14 +94,6 @@ final class LocationManagerTests: XCTestCase {
 		
 		// Then
 		XCTAssertFalse(sut.isAuthorisationDenied)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.latitude,
-			37.7749
-		)
-		XCTAssertEqual(
-			mockCLLocationManager.location?.coordinate.longitude,
-			-122.4194
-		)
 	}
 	
 	func testLocationManagerDidChangeAuthorization_whenDenied_setsAuthorisationDenied() {
@@ -166,6 +142,27 @@ final class LocationManagerTests: XCTestCase {
 			sut.errorAccessingLocation as? NSError
 		)
 		XCTAssertEqual(errorReceived, error)
+	}
+	
+	// MARK: - requestLocation() tests
+	func testLocationManager_whenRequestLocation_shouldSetTheLocation() {
+		// Given
+		let (sut, mockCLLocationManager) = makeSUT(
+			authorisationStatus: .authorizedAlways
+		)
+		
+		// When
+		sut.requestLocation()
+		
+		// Then
+		XCTAssertEqual(
+			mockCLLocationManager.location?.coordinate.latitude,
+			37.7749
+		)
+		XCTAssertEqual(
+			mockCLLocationManager.location?.coordinate.longitude,
+			-122.4194
+		)
 	}
 	
 	// MARK: - Helpers
