@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrentWeatherResponse: Decodable {
+struct CurrentWeatherResponse: Codable {
 	let units: Units?
 	let values: Values?
 
@@ -18,7 +18,7 @@ struct CurrentWeatherResponse: Decodable {
 }
 
 extension CurrentWeatherResponse {
-	struct Units: Decodable {
+	struct Units: Codable {
 		let temperature: String?
 
 		enum CodingKeys: String, CodingKey {
@@ -28,7 +28,7 @@ extension CurrentWeatherResponse {
 }
 
 extension CurrentWeatherResponse {
-	struct Values: Decodable {
+	struct Values: Codable {
 		let temperature: Double?
 		let weatherCode: Int?
 		let isDay: Int?
