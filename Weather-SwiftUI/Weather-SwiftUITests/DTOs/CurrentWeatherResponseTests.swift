@@ -15,7 +15,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "current_weather"
 		
 		// When
-		let sut = try makeSut(CurrentWeatherResponse.self, from: fileName)
+		let sut = try decode(CurrentWeatherResponse.self, from: fileName)
 		
 		// Then
 		XCTAssertNotNil(sut.units)
@@ -27,7 +27,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "current_weather_no_current"
 		
 		// When
-		let sut = try makeSut(CurrentWeatherResponse.self, from: fileName)
+		let sut = try decode(CurrentWeatherResponse.self, from: fileName)
 		
 		// Then
 		XCTAssertNotNil(sut.units)
@@ -39,7 +39,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "current_weather_no_current_units"
 		
 		// When
-		let sut = try makeSut(CurrentWeatherResponse.self, from: fileName)
+		let sut = try decode(CurrentWeatherResponse.self, from: fileName)
 		
 		// Then
 		XCTAssertNil(sut.units)
@@ -52,7 +52,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "current_units"
 		
 		// When
-		let sut = try makeSut(CurrentWeatherResponse.Units.self, from: fileName)
+		let sut = try decode(CurrentWeatherResponse.Units.self, from: fileName)
 		
 		// Then
 		XCTAssertEqual(sut.temperature, "°C")
@@ -63,7 +63,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "empty"
 		
 		// When
-		let sut = try makeSut(CurrentWeatherResponse.Units.self, from: fileName)
+		let sut = try decode(CurrentWeatherResponse.Units.self, from: fileName)
 		
 		// Then
 		XCTAssertNil(sut.temperature)
@@ -75,7 +75,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "current_values"
 		
 		// When
-		let sut = try makeSut(
+		let sut = try decode(
 			CurrentWeatherResponse.Values.self,
 			from: fileName
 		)
@@ -91,7 +91,7 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		let fileName = "empty"
 		
 		// When
-		let sut = try makeSut(
+		let sut = try decode(
 			CurrentWeatherResponse.Values.self,
 			from: fileName
 		)
@@ -100,18 +100,5 @@ final class CurrentWeatherResponseTests: XCTestCase {
 		XCTAssertNil(sut.temperature)
 		XCTAssertNil(sut.weatherCode)
 		XCTAssertNil(sut.isDay)
-	}
-	
-	// MARK: - Helper functions
-	private func makeSut<T: Decodable>(
-		_ type: T.Type,
-		from fileName: String
-	) throws -> T {
-		let bundle = Bundle(for: Swift.type(of: self))
-		let url = try XCTUnwrap(
-			bundle.url(forResource: fileName, withExtension: "json")
-		)
-		let data = try Data(contentsOf: url)
-		return try JSONDecoder().decode(type, from: data)
 	}
 }
