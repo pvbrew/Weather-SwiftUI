@@ -17,6 +17,8 @@ struct ContentView: View {
 				Text("Latitude: \(coordinate.latitude)")
 				
 				Text("Longitude: \(coordinate.longitude)")
+			} else if let error = locationManager.errorAccessingLocation {
+				Text("Location unavailable: \(error.localizedDescription)")
 			} else {
 				Text("Unknown Location")
 			}
@@ -38,6 +40,9 @@ struct ContentView: View {
 			.buttonStyle(.borderedProminent)
 		}
 		.padding()
+		.task {
+			locationManager.checkLocationAuthorisation()
+		}
 		.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
 			Button("Cancel", role: .cancel) {}
 			Button("Open Settings") {
