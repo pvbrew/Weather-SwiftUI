@@ -26,6 +26,16 @@ struct ContentView: View {
 				locationManager.checkLocationAuthorisation()
 			}
 			.buttonStyle(.borderedProminent)
+			
+			Button("Get weather") {
+				Task {
+					if let coordinates = locationManager.lastKnownLocation {
+						let weather = try await APIClient().getCurrentWeather(at: coordinates)
+						print(weather)
+					}
+				}
+			}
+			.buttonStyle(.borderedProminent)
 		}
 		.padding()
 		.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
