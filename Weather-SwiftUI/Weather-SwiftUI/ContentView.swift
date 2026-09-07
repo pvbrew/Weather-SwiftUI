@@ -31,10 +31,17 @@ struct ContentView: View {
 			
 			Button("Get weather") {
 				Task {
-					if let coordinates = locationManager.lastKnownLocation {
-						let weather = try await APIClient().getCurrentWeather(at: coordinates)
-						print(weather)
-					}
+					guard let coordinates = locationManager.lastKnownLocation else { return }
+
+					let weather = try await APIClient().getCurrentWeather(at: coordinates)
+					guard let weatherCode = weather.values?.weatherCode,
+						  let isDay = weather.values?.isDay else { return }
+
+					let weatherCondition = WeatherConditionMapper.map(
+						weatherCode: weatherCode,
+						isDay: isDay == 1
+					)
+					print(weatherCondition)
 				}
 			}
 			.buttonStyle(.borderedProminent)
