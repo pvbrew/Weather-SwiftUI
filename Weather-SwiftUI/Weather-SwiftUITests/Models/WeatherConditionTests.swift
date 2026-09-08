@@ -186,4 +186,190 @@ final class WeatherConditionTests: XCTestCase {
 		// Then
 		XCTAssertEqual(imageName, "thermometer.variable")
 	}
+
+	// MARK: - gradient tests
+	func testGradient_whenClearDay_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.clearDay
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.ClearDay.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.ClearDay.end)
+	}
+
+	func testGradient_whenClearNight_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.clearNight
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.ClearNight.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.ClearNight.end)
+	}
+
+	func testGradient_whenCloudy_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.cloudy
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Cloudy.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Cloudy.end)
+	}
+
+	func testGradient_whenRain_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.rain
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Rain.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Rain.end)
+	}
+
+	func testGradient_whenSnow_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.snow
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Snow.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Snow.end)
+	}
+
+	func testGradient_whenThunderstorm_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.thunderstorm
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Thunderstorm.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Thunderstorm.end)
+	}
+
+	func testGradient_whenFog_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.fog
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Fog.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Fog.end)
+	}
+
+	func testGradient_whenUnknown_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.unknown
+
+		// When
+		let gradient = condition.gradient
+
+		// Then
+		XCTAssertEqual(gradient.start, .ConditionColours.Fog.start)
+		XCTAssertEqual(gradient.end, .ConditionColours.Fog.end)
+	}
+
+	// MARK: - accent tests
+	func testAccent_whenClearDay_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.clearDay
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.ClearDay.accent)
+	}
+
+	func testAccent_whenClearNight_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.clearNight
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.ClearNight.accent)
+	}
+
+	func testAccent_whenCloudy_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.cloudy
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Cloudy.accent)
+	}
+
+	func testAccent_whenRain_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.rain
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Rain.accent)
+	}
+
+	func testAccent_whenSnow_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.snow
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Snow.accent)
+	}
+
+	func testAccent_whenThunderstorm_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.thunderstorm
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Thunderstorm.accent)
+	}
+
+	func testAccent_whenFog_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.fog
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Fog.accent)
+	}
+
+	func testAccent_whenUnknown_shouldReturnTheExpectedValue() {
+		// Given
+		let condition = WeatherCondition.unknown
+
+		// When
+		let accent = condition.accent
+
+		// Then
+		XCTAssertEqual(accent, .ConditionColours.Fog.accent)
+	}
 }
