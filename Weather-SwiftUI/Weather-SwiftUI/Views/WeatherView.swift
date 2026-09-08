@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  WeatherView.swift
 //  Weather-SwiftUI
 //
 //  Created by Panagiotis Vakalis on 31/8/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreLocation
 
-struct ContentView: View {
+struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
 	
     var body: some View {
@@ -67,5 +67,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    WeatherView()
 }
