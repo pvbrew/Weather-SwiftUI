@@ -10,6 +10,7 @@ import CoreLocation
 
 struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
+	@EnvironmentObject private var weatherAggregateModel: WeatherAggregateModel
 	
     var body: some View {
 		VStack {
@@ -23,6 +24,13 @@ struct WeatherView: View {
 				Text("Unknown Location")
 			}
 			
+			if let weather = weatherAggregateModel.currentWeather {
+				Text(weather.temperature)
+			} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
+				Text("Error getting weather: \(error.localizedDescription)")
+			} else {
+				Text("No weather")
+			}
 			
 			Button {
 				Task {
@@ -40,14 +48,11 @@ struct WeatherView: View {
 			
 			Button("Get weather") {
 				Task {
-					guard let coordinates = locationManager.lastKnownLocation else { return }
-
-					let weather = try await APIClient().getCurrentWeather(at: coordinates)
-					let currentWeather = CurrentWeatherMapper.map(weather: weather)
-					print(currentWeather)
+					await weatherAggregateModel.getCurrentWeather(at: locationManager.lastKnownLocation)
 				}
 			}
 			.buttonStyle(.borderedProminent)
+			.disabled(weatherAggregateModel.isGettingCurrentWeather)
 		}
 		.padding()
 		.task {
@@ -68,4 +73,5 @@ struct WeatherView: View {
 
 #Preview {
     WeatherView()
+		.environmentObject(WeatherAggregateModel(apiClient: APIClient()))
 }

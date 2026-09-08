@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Weather_SwiftUIApp: App {
+	private var apiClient = APIClient()
+	
     var body: some Scene {
         WindowGroup {
             WeatherView()
+				.environmentObject(WeatherAggregateModel(apiClient: apiClient))
         }
     }
 }

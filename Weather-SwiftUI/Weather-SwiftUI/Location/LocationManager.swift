@@ -11,6 +11,7 @@ import Combine
 
 final class LocationManager: NSObject, ObservableObject {
 	// MARK: - Published properties
+	// TODO: Turn them into private(set)
 	@Published var lastKnownLocation: CLLocationCoordinate2D?
 	@Published var isAuthorisationDenied = false
 	@Published var errorAccessingLocation: Error?
