@@ -24,10 +24,19 @@ struct ContentView: View {
 			}
 			
 			
-			Button("Get location") {
-				locationManager.requestLocation()
+			Button {
+				Task {
+					await locationManager.requestLocationIfAuthorised()
+				}
+			} label: {
+				if locationManager.isRequestingLocation {
+					ProgressView()
+				} else {
+					Text("Get location")
+				}
 			}
 			.buttonStyle(.borderedProminent)
+			.disabled(locationManager.isRequestingLocation)
 			
 			Button("Get weather") {
 				Task {
@@ -48,7 +57,7 @@ struct ContentView: View {
 		}
 		.padding()
 		.task {
-			locationManager.checkLocationAuthorisation()
+			await locationManager.checkLocationAuthorisationAsync()
 		}
 		.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
 			Button("Cancel", role: .cancel) {}

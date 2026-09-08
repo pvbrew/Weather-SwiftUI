@@ -15,13 +15,15 @@ final class MockCLLocationManager: CLLocationManageable {
 	var authorizationStatus: CLAuthorizationStatus = .notDetermined
 	var location: CLLocation?
 	var hasRequestedWhenInUseAuthorization = false
-	
+	var requestLocationCallCount = 0
+
 	// MARK: - Functions
 	func requestWhenInUseAuthorization() {
 		hasRequestedWhenInUseAuthorization = true
 	}
-	
+
 	func requestLocation() {
+		requestLocationCallCount += 1
 		location = CLLocation(latitude: 37.7749, longitude: -122.4194)
 	}
 }
