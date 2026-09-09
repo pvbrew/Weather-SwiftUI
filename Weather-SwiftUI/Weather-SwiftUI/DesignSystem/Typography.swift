@@ -14,4 +14,6 @@ struct Typography {
 	static let weatherConditionLarge = Font.system(size: 100.0, weight: .regular)
 	
 	static let weatherConditionTitleLarge = Font.system(size: 22.0, weight: .regular)
+	
+	static let errorText = Font.system(size: 14.0, weight: .bold)
 }

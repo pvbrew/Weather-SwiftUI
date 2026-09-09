@@ -26,10 +26,12 @@ struct WeatherView: View {
 			VStack {
 				if let error = locationManager.errorAccessingLocation {
 					Text("Location unavailable: \(error.localizedDescription)")
+						.errorStyle()
 				}
 				
 				if let error = weatherAggregateModel.errorGettingCurrentWeather {
 					Text("Error getting weather: \(error.localizedDescription)")
+						.errorStyle()
 				}
 				
 				if let currentWeather = weatherAggregateModel.currentWeather {
