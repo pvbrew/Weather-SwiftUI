@@ -24,14 +24,8 @@ struct WeatherView: View {
 				BackgroundGradientView(startColour: Color(.systemGray6), endColour: Color(.systemGray))
 			}
 			VStack {
-				if let coordinate = locationManager.lastKnownLocation {
-					Text("Latitude: \(coordinate.latitude)")
-					
-					Text("Longitude: \(coordinate.longitude)")
-				} else if let error = locationManager.errorAccessingLocation {
+				if let error = locationManager.errorAccessingLocation {
 					Text("Location unavailable: \(error.localizedDescription)")
-				} else {
-					Text("Unknown Location")
 				}
 				
 				if let error = weatherAggregateModel.errorGettingCurrentWeather {
