@@ -9,6 +9,7 @@ import XCTest
 import CoreLocation
 @testable import Weather_SwiftUI
 
+@MainActor
 final class LocationManagerTests: XCTestCase {
 	// MARK: - locationManagerDidChangeAuthorization(_:) tests
 	func testLocationManagerDidChangeAuthorization_whenAuthorised_startsUpdatingLocation() {
