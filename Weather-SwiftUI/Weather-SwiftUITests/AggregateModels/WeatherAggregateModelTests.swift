@@ -11,7 +11,6 @@ import CoreLocation
 
 @MainActor
 final class WeatherAggregateModelTests: XCTestCase {
-	// MARK: - Properties
 	private let coordinates = CLLocationCoordinate2D(
 		latitude: 0.0,
 		longitude: 0.0
@@ -153,8 +152,12 @@ final class WeatherAggregateModelTests: XCTestCase {
 		await sut.getCurrentWeather(at: coordinates)
 		apiClient.getCurrentWeatherResult = .success(
 			CurrentWeatherResponse(
-				units: .init(temperature: "°C"),
-				values: .init(temperature: 21.3, weatherCode: 0, isDay: 1)
+				units: CurrentWeatherResponse.Units(temperature: "°C"),
+				values: CurrentWeatherResponse.Values(
+					temperature: 21.3,
+					weatherCode: 0,
+					isDay: 1
+				)
 			)
 		)
 
@@ -182,8 +185,8 @@ final class WeatherAggregateModelTests: XCTestCase {
 	// MARK: - Helper functions
 	private func makeSUT(
 		apiClientResult: Result<CurrentWeatherResponse, Error>? = nil
-	) -> (sut: WeatherAggregateModel, apiClient: MockAPIClientProtocol) {
-		let apiClient = MockAPIClientProtocol()
+	) -> (sut: WeatherAggregateModel, apiClient: MockAPIClient) {
+		let apiClient = MockAPIClient()
 		if let apiClientResult {
 			apiClient.getCurrentWeatherResult = apiClientResult
 		}

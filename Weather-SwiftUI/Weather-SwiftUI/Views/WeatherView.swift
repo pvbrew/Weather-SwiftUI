@@ -26,9 +26,15 @@ struct WeatherView: View {
     var body: some View {
 		ZStack {
 			if let gradient = currentWeather?.weatherCondition.gradient {
-				BackgroundGradientView(startColour: Color(gradient.start), endColour: Color(gradient.end))
+				BackgroundGradientView(
+					startColour: Color(gradient.start),
+					endColour: Color(gradient.end)
+				)
 			} else {
-				BackgroundGradientView(startColour: Color(.systemGray6), endColour: Color(.systemGray))
+				BackgroundGradientView(
+					startColour: Color(.systemGray6),
+					endColour: Color(.systemGray)
+				)
 			}
 			ScrollView {
 				VStack {

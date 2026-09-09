@@ -10,26 +10,21 @@ import CoreLocation
 import Combine
 
 final class LocationManager: NSObject, ObservableObject {
-	// MARK: - Published properties
-	// TODO: Turn them into private(set)
-	@Published var lastKnownLocation: CLLocationCoordinate2D?
+	@Published private(set) var lastKnownLocation: CLLocationCoordinate2D?
 	@Published var isAuthorisationDenied = false
-	@Published var errorAccessingLocation: Error?
+	@Published private(set) var errorAccessingLocation: Error?
 	@Published private(set) var isRequestingLocation = false
-
-	// MARK: - Properties
+	
 	private var manager: CLLocationManageable
 	private var hasRetriedAfterLocationUnknown = false
 	private var isWaitingForAuthorisationToRequestLocation = false
-
-	// MARK: - Intializers
+	
 	init(manager: CLLocationManageable = CLLocationManager()) {
 		self.manager = manager
 		super.init()
 		self.manager.delegate = self
 	}
 	
-	// MARK: - Functions
 	/// Reads `authorizationStatus` off the main thread (its first read in a process
 	/// synchronously blocks on an XPC round-trip to `location`, which can take long
 	/// enough to freeze the UI if done on the main actor), then requests a location
@@ -38,7 +33,7 @@ final class LocationManager: NSObject, ObservableObject {
 	/// `didFailWithError`) when permission isn't granted.
 	func requestLocationOrAuthorise() async {
 		let status = await Task.detached(priority: .userInitiated) { [manager] in
-			manager.authorizationStatus
+			manager.authorizationStatus	// FIXME: Main actor-isolated property 'authorizationStatus' cannot be accessed from outside of the actor; this is an error in the Swift 6 language mode warning
 		}.value
 		handle(status: status)
 

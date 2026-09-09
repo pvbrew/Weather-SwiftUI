@@ -10,7 +10,6 @@ import CoreLocation
 @testable import Weather_SwiftUI
 
 final class APIClientTests: XCTestCase {
-	// MARK: - Properties
 	private var mockCurrentWeatherResponse: CurrentWeatherResponse {
 		try! decode(CurrentWeatherResponse.self, from: "current_weather")
 	}
@@ -79,7 +78,10 @@ final class APIClientTests: XCTestCase {
 				at: coordinates
 			)
 		) { error in
-			XCTAssertEqual(error as? APIClient.NetworkError, .unacceptableStatusCode(300))
+			XCTAssertEqual(
+				error as? APIClient.NetworkError,
+				.unacceptableStatusCode(300)
+			)
 		}
 	}
 

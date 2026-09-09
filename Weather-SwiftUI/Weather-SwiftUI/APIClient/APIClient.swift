@@ -30,7 +30,9 @@ struct APIClient: APIClientProtocol {
 		at coordinates: CLLocationCoordinate2D
 	) async throws -> CurrentWeatherResponse {
 		let url = urlBuilder.buildForCurrentWeather(at: coordinates)
-		let (data, response) = try await sessionAdapter.performRequest(using: url)
+		let (data, response) = try await sessionAdapter.performRequest(
+			using: url
+		)
 		
 		guard let httpResponse = response as? HTTPURLResponse else {
 			throw NetworkError.nonHTTPResponse

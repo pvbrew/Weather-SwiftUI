@@ -29,9 +29,7 @@ final class SessionAdapterTests: XCTestCase {
 		let sut = makeSut(withError: NSError(domain: "domain", code: 1))
 		
 		// When Then
-		await assertThrowsAsyncError(
-			try await sut.performRequest(using: url)
-		)
+		await assertThrowsAsyncError(try await sut.performRequest(using: url))
 	}
 	
 	// MARK: - Helper functions

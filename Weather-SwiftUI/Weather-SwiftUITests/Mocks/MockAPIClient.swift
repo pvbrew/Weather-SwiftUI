@@ -1,5 +1,5 @@
 //
-//  MockAPIClientProtocol.swift
+//  MockAPIClient.swift
 //  Weather-SwiftUITests
 //
 //  Created by Panagiotis Vakalis on 8/9/26.
@@ -9,9 +9,7 @@ import Foundation
 import CoreLocation
 @testable import Weather_SwiftUI
 
-final class MockAPIClientProtocol: APIClientProtocol {
-	// MARK: - getCurrentWeather
-
+final class MockAPIClient: APIClientProtocol {
 	private(set) var getCurrentWeatherCallCount = 0
 	private(set) var getCurrentWeatherReceivedCoordinates: CLLocationCoordinate2D?
 	var getCurrentWeatherResult: Result<CurrentWeatherResponse, Error> = .success(

@@ -8,12 +8,10 @@
 import CoreLocation
 
 protocol CLLocationManageable {
-	// MARK: - Properties
 	var delegate: CLLocationManagerDelegate? { get set }
 	var authorizationStatus: CLAuthorizationStatus { get }
 	var location: CLLocation? { get }
 	
-	// MARK: - Functions
 	func requestWhenInUseAuthorization()
 	func requestLocation()
 }

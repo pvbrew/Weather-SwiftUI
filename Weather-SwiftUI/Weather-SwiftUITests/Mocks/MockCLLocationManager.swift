@@ -10,14 +10,12 @@ import CoreLocation
 @testable import Weather_SwiftUI
 
 final class MockCLLocationManager: CLLocationManageable {
-	// MARK: - Properties
 	var delegate: CLLocationManagerDelegate?
 	var authorizationStatus: CLAuthorizationStatus = .notDetermined
 	var location: CLLocation?
 	var hasRequestedWhenInUseAuthorization = false
 	var requestLocationCallCount = 0
-
-	// MARK: - Functions
+	
 	func requestWhenInUseAuthorization() {
 		hasRequestedWhenInUseAuthorization = true
 	}

@@ -11,20 +11,16 @@ import CoreLocation
 
 @MainActor
 final class WeatherAggregateModel: ObservableObject {
-	// MARK: - Published properties
 	@Published private(set) var currentWeather: CurrentWeather?
 	@Published private(set) var errorGettingCurrentWeather: Error?
 	@Published private(set) var isGettingCurrentWeather = false
 	
-	// MARK: - Properties
 	private let apiClient: APIClientProtocol
 	
-	// MARK: - Initialisers
 	init(apiClient: APIClientProtocol) {
 		self.apiClient = apiClient
 	}
 	
-	// MARK: - Functions
 	func getCurrentWeather(at coordinates: CLLocationCoordinate2D?) async {
 		errorGettingCurrentWeather = nil
 		guard let coordinates else {
