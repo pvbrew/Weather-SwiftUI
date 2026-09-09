@@ -41,11 +41,11 @@ This project uses **MV (Observable models)** rather than MVVM:
 
 ## Roadmap
 
-- [ ] Basic UI scaffold
-- [ ] Weather API integration
+- [x] Basic UI scaffold
+- [x] Weather API integration
 - [ ] Location search
-- [ ] Unit tests
-- [ ] CI pipeline
+- [x] Unit tests
+- [x] CI pipeline
 
 ## License
 
