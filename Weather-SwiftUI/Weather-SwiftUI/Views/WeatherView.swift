@@ -13,60 +13,67 @@ struct WeatherView: View {
 	@EnvironmentObject private var weatherAggregateModel: WeatherAggregateModel
 	
     var body: some View {
-		VStack {
-			if let coordinate = locationManager.lastKnownLocation {
-				Text("Latitude: \(coordinate.latitude)")
-				
-				Text("Longitude: \(coordinate.longitude)")
-			} else if let error = locationManager.errorAccessingLocation {
-				Text("Location unavailable: \(error.localizedDescription)")
+		ZStack {
+			if let gradient = weatherAggregateModel.currentWeather?.weatherCondition.gradient {
+				BackgroundGradientView(startColour: Color(gradient.start), endColour: Color(gradient.end))
 			} else {
-				Text("Unknown Location")
+				BackgroundGradientView(startColour: Color(.systemGray6), endColour: Color(.systemGray))
 			}
-			
-			if let weather = weatherAggregateModel.currentWeather {
-				Text(weather.temperature)
-			} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
-				Text("Error getting weather: \(error.localizedDescription)")
-			} else {
-				Text("No weather")
-			}
-			
-			Button {
-				Task {
-					await locationManager.requestLocationIfAuthorised()
-				}
-			} label: {
-				if locationManager.isRequestingLocation {
-					ProgressView()
+			VStack {
+				if let coordinate = locationManager.lastKnownLocation {
+					Text("Latitude: \(coordinate.latitude)")
+					
+					Text("Longitude: \(coordinate.longitude)")
+				} else if let error = locationManager.errorAccessingLocation {
+					Text("Location unavailable: \(error.localizedDescription)")
 				} else {
-					Text("Get location")
+					Text("Unknown Location")
 				}
-			}
-			.buttonStyle(.borderedProminent)
-			.disabled(locationManager.isRequestingLocation)
-			
-			Button("Get weather") {
-				Task {
-					await weatherAggregateModel.getCurrentWeather(at: locationManager.lastKnownLocation)
+				
+				if let weather = weatherAggregateModel.currentWeather {
+					Text(weather.temperature)
+				} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
+					Text("Error getting weather: \(error.localizedDescription)")
+				} else {
+					Text("No weather")
 				}
-			}
-			.buttonStyle(.borderedProminent)
-			.disabled(weatherAggregateModel.isGettingCurrentWeather)
-		}
-		.padding()
-		.task {
-			await locationManager.checkLocationAuthorisationAsync()
-		}
-		.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
-			Button("Cancel", role: .cancel) {}
-			Button("Open Settings") {
-				if let url = URL(string: UIApplication.openSettingsURLString) {
-					UIApplication.shared.open(url)
+				
+				Button {
+					Task {
+						await locationManager.requestLocationIfAuthorised()
+					}
+				} label: {
+					if locationManager.isRequestingLocation {
+						ProgressView()
+					} else {
+						Text("Get location")
+					}
 				}
+				.buttonStyle(.borderedProminent)
+				.disabled(locationManager.isRequestingLocation)
+				
+				Button("Get weather") {
+					Task {
+						await weatherAggregateModel.getCurrentWeather(at: locationManager.lastKnownLocation)
+					}
+				}
+				.buttonStyle(.borderedProminent)
+				.disabled(weatherAggregateModel.isGettingCurrentWeather)
 			}
-		} message: {
-			Text("Weather-SwiftUI needs access to your location to show local weather. Enable it in Settings.")
+			.padding()
+			.task {
+				await locationManager.checkLocationAuthorisationAsync()
+			}
+			.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
+				Button("Cancel", role: .cancel) {}
+				Button("Open Settings") {
+					if let url = URL(string: UIApplication.openSettingsURLString) {
+						UIApplication.shared.open(url)
+					}
+				}
+			} message: {
+				Text("Weather-SwiftUI needs access to your location to show local weather. Enable it in Settings.")
+			}
 		}
     }
 }
