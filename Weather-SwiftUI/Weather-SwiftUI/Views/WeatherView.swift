@@ -24,28 +24,35 @@ struct WeatherView: View {
 			} else {
 				BackgroundGradientView(startColour: Color(.systemGray6), endColour: Color(.systemGray))
 			}
-			VStack {
-				if let error = locationManager.errorAccessingLocation {
-					Text("Location unavailable: \(error.localizedDescription)")
-						.errorStyle()
+			ScrollView {
+				VStack {
+					if let error = locationManager.errorAccessingLocation {
+						Text("Location unavailable: \(error.localizedDescription). Pull to refresh")
+							.errorStyle()
+					}
+
+					if let error = weatherAggregateModel.errorGettingCurrentWeather {
+						Text("Error getting weather: \(error.localizedDescription). Pull to refresh")
+							.errorStyle()
+					}
+
+					if let currentWeather = weatherAggregateModel.currentWeather {
+						Image(systemName: currentWeather.weatherCondition.imageName)
+							.font(Typography.weatherConditionLarge)
+							.foregroundStyle(Color(currentWeather.weatherCondition.accent))
+						Text(currentWeather.temperature)
+							.font(Typography.heroTemperature)
+							.foregroundStyle(.textColour)
+						Text(currentWeather.weatherCondition.title)
+							.font(Typography.weatherConditionTitleLarge)
+							.foregroundStyle(.textColour)
+					}
 				}
-				
-				if let error = weatherAggregateModel.errorGettingCurrentWeather {
-					Text("Error getting weather: \(error.localizedDescription)")
-						.errorStyle()
-				}
-				
-				if let currentWeather = weatherAggregateModel.currentWeather {
-					Image(systemName: currentWeather.weatherCondition.imageName)
-						.font(Typography.weatherConditionLarge)
-						.foregroundStyle(Color(currentWeather.weatherCondition.accent))
-					Text(currentWeather.temperature)
-						.font(Typography.heroTemperature)
-						.foregroundStyle(.textColour)
-					Text(currentWeather.weatherCondition.title)
-						.font(Typography.weatherConditionTitleLarge)
-						.foregroundStyle(.textColour)
-				}
+				.frame(maxWidth: .infinity)
+				.containerRelativeFrame(.vertical, alignment: .center)
+			}
+			.refreshable {
+				await locationManager.requestLocationOrAuthorise()
 			}
 			.padding()
 			.task {
