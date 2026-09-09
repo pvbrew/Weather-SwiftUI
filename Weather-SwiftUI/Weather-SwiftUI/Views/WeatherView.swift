@@ -12,9 +12,13 @@ struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
 	@EnvironmentObject private var weatherAggregateModel: WeatherAggregateModel
 	
+	private var currentWeather: CurrentWeather? {
+		weatherAggregateModel.currentWeather
+	}
+	
     var body: some View {
 		ZStack {
-			if let gradient = weatherAggregateModel.currentWeather?.weatherCondition.gradient {
+			if let gradient = currentWeather?.weatherCondition.gradient {
 				BackgroundGradientView(startColour: Color(gradient.start), endColour: Color(gradient.end))
 			} else {
 				BackgroundGradientView(startColour: Color(.systemGray6), endColour: Color(.systemGray))
@@ -30,14 +34,21 @@ struct WeatherView: View {
 					Text("Unknown Location")
 				}
 				
-				if let weather = weatherAggregateModel.currentWeather {
-					Text(weather.temperature)
-				} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
+				if let error = weatherAggregateModel.errorGettingCurrentWeather {
 					Text("Error getting weather: \(error.localizedDescription)")
-				} else {
-					Text("No weather")
 				}
 				
+				if let currentWeather = weatherAggregateModel.currentWeather {
+					Image(systemName: currentWeather.weatherCondition.imageName)
+						.font(Typography.weatherConditionLarge)
+						.foregroundStyle(Color(currentWeather.weatherCondition.accent))
+					Text(currentWeather.temperature)
+						.font(Typography.heroTemperature)
+						.foregroundStyle(.textColour)
+					Text(currentWeather.weatherCondition.title)
+						.font(Typography.weatherConditionTitleLarge)
+						.foregroundStyle(.textColour)
+				}
 				Button {
 					Task {
 						await locationManager.requestLocationIfAuthorised()
