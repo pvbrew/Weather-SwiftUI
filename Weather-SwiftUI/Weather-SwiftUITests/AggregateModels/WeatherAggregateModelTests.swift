@@ -164,6 +164,20 @@ final class WeatherAggregateModelTests: XCTestCase {
 		// Then
 		XCTAssertNil(sut.errorGettingCurrentWeather)
 	}
+	
+	// MARK: - resetCurrentWeather() tests
+	func testResetCurrentWeather_whenCalled_shouldSetCurrentWeatherToNil() async {
+		// Given
+		let (sut, _) = makeSUT()
+		await sut.getCurrentWeather(at: coordinates)
+		XCTAssertNotNil(sut.currentWeather)
+		
+		// When
+		sut.resetCurrentWeather()
+		
+		// Then
+		XCTAssertNil(sut.currentWeather)
+	}
 
 	// MARK: - Helper functions
 	private func makeSUT(

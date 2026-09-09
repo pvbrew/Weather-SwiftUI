@@ -16,7 +16,13 @@ struct WeatherView: View {
 	private var currentWeather: CurrentWeather? {
 		weatherAggregateModel.currentWeather
 	}
-	
+
+	private var isLoading: Bool {
+		currentWeather == nil
+			&& locationManager.errorAccessingLocation == nil
+			&& weatherAggregateModel.errorGettingCurrentWeather == nil
+	}
+
     var body: some View {
 		ZStack {
 			if let gradient = currentWeather?.weatherCondition.gradient {
@@ -46,12 +52,15 @@ struct WeatherView: View {
 						Text(currentWeather.weatherCondition.title)
 							.font(Typography.weatherConditionTitleLarge)
 							.foregroundStyle(.textColour)
+					} else if isLoading {
+						LoadingView()
 					}
 				}
 				.frame(maxWidth: .infinity)
 				.containerRelativeFrame(.vertical, alignment: .center)
 			}
 			.refreshable {
+				weatherAggregateModel.resetCurrentWeather()
 				await locationManager.requestLocationOrAuthorise()
 			}
 			.padding()

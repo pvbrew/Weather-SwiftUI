@@ -44,6 +44,10 @@ final class WeatherAggregateModel: ObservableObject {
 			errorGettingCurrentWeather = error
 		}
 	}
+	
+	func resetCurrentWeather() {
+		currentWeather = nil
+	}
 }
 
 extension WeatherAggregateModel {
