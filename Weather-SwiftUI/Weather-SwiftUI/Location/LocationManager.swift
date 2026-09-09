@@ -20,6 +20,7 @@ final class LocationManager: NSObject, ObservableObject {
 	// MARK: - Properties
 	private var manager: CLLocationManageable
 	private var hasRetriedAfterLocationUnknown = false
+	private var isWaitingForAuthorisationToRequestLocation = false
 
 	// MARK: - Intializers
 	init(manager: CLLocationManageable = CLLocationManager()) {
@@ -29,41 +30,43 @@ final class LocationManager: NSObject, ObservableObject {
 	}
 	
 	// MARK: - Functions
-	/// Reads `authorizationStatus` off the main thread and updates published state
-	/// accordingly (see `handle(status:)`). The first read of that property in a
-	/// process synchronously blocks on an XPC round-trip to `locationd`, which can
-	/// take long enough to freeze the UI if done on the main actor (e.g. from a
-	/// `.task` at launch).
-	@discardableResult
-	func checkLocationAuthorisationAsync() async -> CLAuthorizationStatus {
+	/// Reads `authorizationStatus` off the main thread (its first read in a process
+	/// synchronously blocks on an XPC round-trip to `location`, which can take long
+	/// enough to freeze the UI if done on the main actor), then requests a location
+	/// if authorised, prompting for authorisation first if it hasn't been decided
+	/// yet, since calling `manager.requestLocation()` directly silently fails (via
+	/// `didFailWithError`) when permission isn't granted.
+	func requestLocationOrAuthorise() async {
 		let status = await Task.detached(priority: .userInitiated) { [manager] in
 			manager.authorizationStatus
 		}.value
 		handle(status: status)
-		return status
-	}
-
-	/// Confirms authorisation (see `checkLocationAuthorisationAsync()`) before
-	/// requesting a location. Use this from user-initiated actions, such as a
-	/// "Get location" button tap, since calling `manager.requestLocation()` directly
-	/// silently fails (via `didFailWithError`) when permission isn't granted yet.
-	func requestLocationIfAuthorised() async {
-		let status = await checkLocationAuthorisationAsync()
 
 		if status == .authorizedAlways || status == .authorizedWhenInUse {
-			isRequestingLocation = true
-			hasRetriedAfterLocationUnknown = false
-			errorAccessingLocation = nil
-			manager.requestLocation()
+			requestLocation()
+		} else if status == .notDetermined {
+			isWaitingForAuthorisationToRequestLocation = true
 		}
+	}
+
+	private func requestLocation() {
+		isRequestingLocation = true
+		hasRetriedAfterLocationUnknown = false
+		errorAccessingLocation = nil
+		manager.requestLocation()
 	}
 
 	private func handle(status: CLAuthorizationStatus) {
 		switch status {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
+			if isWaitingForAuthorisationToRequestLocation {
+				isWaitingForAuthorisationToRequestLocation = false
+				requestLocation()
+			}
 		case .denied, .restricted:
 			isAuthorisationDenied = true
+			isWaitingForAuthorisationToRequestLocation = false
 		case .notDetermined:
 			manager.requestWhenInUseAuthorization()
 		@unknown default:

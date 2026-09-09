@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import Combine
 
 struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
@@ -45,31 +46,17 @@ struct WeatherView: View {
 						.font(Typography.weatherConditionTitleLarge)
 						.foregroundStyle(.textColour)
 				}
-				Button {
-					Task {
-						await locationManager.requestLocationIfAuthorised()
-					}
-				} label: {
-					if locationManager.isRequestingLocation {
-						ProgressView()
-					} else {
-						Text("Get location")
-					}
-				}
-				.buttonStyle(.borderedProminent)
-				.disabled(locationManager.isRequestingLocation)
-				
-				Button("Get weather") {
-					Task {
-						await weatherAggregateModel.getCurrentWeather(at: locationManager.lastKnownLocation)
-					}
-				}
-				.buttonStyle(.borderedProminent)
-				.disabled(weatherAggregateModel.isGettingCurrentWeather)
 			}
 			.padding()
 			.task {
-				await locationManager.checkLocationAuthorisationAsync()
+				await locationManager.requestLocationOrAuthorise()
+			}
+			.onReceive(locationManager.$lastKnownLocation.compactMap { coordinates in
+				coordinates
+			}) { newLocation in
+				Task {
+					await weatherAggregateModel.getCurrentWeather(at: newLocation)
+				}
 			}
 			.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
 				Button("Cancel", role: .cancel) {}
