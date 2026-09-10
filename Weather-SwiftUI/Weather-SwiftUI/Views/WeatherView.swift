@@ -12,6 +12,7 @@ import Combine
 struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
 	@EnvironmentObject private var weatherAggregateModel: WeatherAggregateModel
+	@State private var showLocationDeniedAlert = false
 	
 	private var currentWeather: CurrentWeather? {
 		weatherAggregateModel.currentWeather
@@ -21,6 +22,7 @@ struct WeatherView: View {
 		currentWeather == nil
 			&& locationManager.errorAccessingLocation == nil
 			&& weatherAggregateModel.errorGettingCurrentWeather == nil
+			&& !locationManager.isAuthorisationDenied
 	}
 
     var body: some View {
@@ -80,7 +82,10 @@ struct WeatherView: View {
 					await weatherAggregateModel.getCurrentWeather(at: newLocation)
 				}
 			}
-			.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
+			.onChange(of: locationManager.isAuthorisationDenied, { _, denied in
+				showLocationDeniedAlert = denied
+			})
+			.alert("Location Access Denied", isPresented: $showLocationDeniedAlert) {
 				Button("Cancel", role: .cancel) {}
 				Button("Open Settings") {
 					if let url = URL(string: UIApplication.openSettingsURLString) {
