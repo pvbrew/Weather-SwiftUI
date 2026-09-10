@@ -24,6 +24,12 @@ struct WeatherView: View {
 			&& weatherAggregateModel.errorGettingCurrentWeather == nil
 			&& !locationManager.isAuthorisationDenied
 	}
+	
+	private let openSettingsButton = Button("Open Settings") {
+		if let url = URL(string: UIApplication.openSettingsURLString) {
+			UIApplication.shared.open(url)
+		}
+	}
 
     var body: some View {
 		ZStack {
@@ -48,6 +54,12 @@ struct WeatherView: View {
 					if let error = weatherAggregateModel.errorGettingCurrentWeather {
 						Text("Error getting weather: \(error.localizedDescription). Pull to refresh")
 							.errorStyle()
+					}
+					
+					if locationManager.isAuthorisationDenied {
+						Text("Location access denied. Enable it in Settings to see local weather.")
+							.errorStyle()
+						openSettingsButton
 					}
 
 					if let currentWeather = weatherAggregateModel.currentWeather {
@@ -87,11 +99,7 @@ struct WeatherView: View {
 			})
 			.alert("Location Access Denied", isPresented: $showLocationDeniedAlert) {
 				Button("Cancel", role: .cancel) {}
-				Button("Open Settings") {
-					if let url = URL(string: UIApplication.openSettingsURLString) {
-						UIApplication.shared.open(url)
-					}
-				}
+				openSettingsButton
 			} message: {
 				Text("Weather-SwiftUI needs access to your location to show local weather. Enable it in Settings.")
 			}
