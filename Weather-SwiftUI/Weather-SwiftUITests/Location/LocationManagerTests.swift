@@ -37,6 +37,26 @@ final class LocationManagerTests: XCTestCase {
 		XCTAssertNil(mockCLLocationManager.location)
 	}
 
+	func testLocationManagerDidChangeAuthorization_whenDeniedAfterError_clearsErrorAccessingLocation() {
+		// Given
+		let (sut, mockCLLocationManager) = makeSUT(
+			authorisationStatus: .authorizedWhenInUse
+		)
+		sut.locationManager(
+			CLLocationManager(),
+			didFailWithError: NSError(domain: "location", code: 0)
+		)
+		XCTAssertNotNil(sut.errorAccessingLocation)
+		mockCLLocationManager.authorizationStatus = .denied
+
+		// When
+		sut.locationManagerDidChangeAuthorization(CLLocationManager())
+
+		// Then
+		XCTAssertTrue(sut.isAuthorisationDenied)
+		XCTAssertNil(sut.errorAccessingLocation)
+	}
+
 	func testLocationManagerDidChangeAuthorization_whenAuthorisedWithoutPriorRequest_doesNotRequestLocation() {
 		// Given
 		let (sut, mockCLLocationManager) = makeSUT(

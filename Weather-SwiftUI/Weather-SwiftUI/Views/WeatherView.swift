@@ -46,20 +46,16 @@ struct WeatherView: View {
 			}
 			ScrollView {
 				VStack {
-					if let error = locationManager.errorAccessingLocation {
-						Text("Location unavailable: \(error.localizedDescription). Pull to refresh")
-							.errorStyle()
-					}
-
-					if let error = weatherAggregateModel.errorGettingCurrentWeather {
-						Text("Error getting weather: \(error.localizedDescription). Pull to refresh")
-							.errorStyle()
-					}
-					
 					if locationManager.isAuthorisationDenied {
 						Text("Location access denied. Enable it in Settings to see local weather.")
 							.errorStyle()
 						openSettingsButton
+					} else if let error = locationManager.errorAccessingLocation {
+						Text("Location unavailable: \(error.localizedDescription). Pull to refresh")
+							.errorStyle()
+					} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
+						Text("Error getting weather: \(error.localizedDescription). Pull to refresh")
+							.errorStyle()
 					}
 
 					if let currentWeather = weatherAggregateModel.currentWeather {

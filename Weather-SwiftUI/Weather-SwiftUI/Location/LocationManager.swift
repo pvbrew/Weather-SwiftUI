@@ -58,6 +58,7 @@ final class LocationManager: NSObject, ObservableObject {
 		case .denied, .restricted:
 			isAuthorisationDenied = true
 			isWaitingForAuthorisationToRequestLocation = false
+			errorAccessingLocation = nil
 		case .notDetermined:
 			manager.requestWhenInUseAuthorization()
 		@unknown default:
