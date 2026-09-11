@@ -12,6 +12,7 @@ import Combine
 struct WeatherView: View {
 	@StateObject private var locationManager = LocationManager()
 	@EnvironmentObject private var weatherAggregateModel: WeatherAggregateModel
+	@State private var showLocationDeniedAlert = false
 	
 	private var currentWeather: CurrentWeather? {
 		weatherAggregateModel.currentWeather
@@ -21,6 +22,13 @@ struct WeatherView: View {
 		currentWeather == nil
 			&& locationManager.errorAccessingLocation == nil
 			&& weatherAggregateModel.errorGettingCurrentWeather == nil
+			&& !locationManager.isAuthorisationDenied
+	}
+	
+	private let openSettingsButton = Button("Open Settings") {
+		if let url = URL(string: UIApplication.openSettingsURLString) {
+			UIApplication.shared.open(url)
+		}
 	}
 
     var body: some View {
@@ -38,12 +46,14 @@ struct WeatherView: View {
 			}
 			ScrollView {
 				VStack {
-					if let error = locationManager.errorAccessingLocation {
+					if locationManager.isAuthorisationDenied {
+						Text("Location access denied. Enable it in Settings to see local weather.")
+							.errorStyle()
+						openSettingsButton
+					} else if let error = locationManager.errorAccessingLocation {
 						Text("Location unavailable: \(error.localizedDescription). Pull to refresh")
 							.errorStyle()
-					}
-
-					if let error = weatherAggregateModel.errorGettingCurrentWeather {
+					} else if let error = weatherAggregateModel.errorGettingCurrentWeather {
 						Text("Error getting weather: \(error.localizedDescription). Pull to refresh")
 							.errorStyle()
 					}
@@ -80,13 +90,12 @@ struct WeatherView: View {
 					await weatherAggregateModel.getCurrentWeather(at: newLocation)
 				}
 			}
-			.alert("Location Access Denied", isPresented: $locationManager.isAuthorisationDenied) {
+			.onChange(of: locationManager.isAuthorisationDenied, { _, denied in
+				showLocationDeniedAlert = denied
+			})
+			.alert("Location Access Denied", isPresented: $showLocationDeniedAlert) {
 				Button("Cancel", role: .cancel) {}
-				Button("Open Settings") {
-					if let url = URL(string: UIApplication.openSettingsURLString) {
-						UIApplication.shared.open(url)
-					}
-				}
+				openSettingsButton
 			} message: {
 				Text("Weather-SwiftUI needs access to your location to show local weather. Enable it in Settings.")
 			}

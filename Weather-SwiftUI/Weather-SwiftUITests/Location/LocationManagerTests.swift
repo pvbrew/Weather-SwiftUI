@@ -14,7 +14,7 @@ final class LocationManagerTests: XCTestCase {
 	// MARK: - locationManagerDidChangeAuthorization(_:) tests
 	func testLocationManagerDidChangeAuthorization_whenAuthorised_startsUpdatingLocation() {
 		// Given
-		let (sut, mockCLLocationManager) = makeSUT(
+		let (sut, _) = makeSUT(
 			authorisationStatus: .authorizedWhenInUse
 		)
 		
@@ -35,6 +35,42 @@ final class LocationManagerTests: XCTestCase {
 		// Then
 		XCTAssertTrue(sut.isAuthorisationDenied)
 		XCTAssertNil(mockCLLocationManager.location)
+	}
+
+	func testLocationManagerDidChangeAuthorization_whenDeniedAfterError_clearsErrorAccessingLocation() {
+		// Given
+		let (sut, mockCLLocationManager) = makeSUT(
+			authorisationStatus: .authorizedWhenInUse
+		)
+		sut.locationManager(
+			CLLocationManager(),
+			didFailWithError: NSError(domain: "location", code: 0)
+		)
+		XCTAssertNotNil(sut.errorAccessingLocation)
+		mockCLLocationManager.authorizationStatus = .denied
+
+		// When
+		sut.locationManagerDidChangeAuthorization(CLLocationManager())
+
+		// Then
+		XCTAssertTrue(sut.isAuthorisationDenied)
+		XCTAssertNil(sut.errorAccessingLocation)
+	}
+
+	func testLocationManagerDidChangeAuthorization_whenAuthorisedAfterBeingDenied_requestsLocation() {
+		// Given
+		let (sut, mockCLLocationManager) = makeSUT(authorisationStatus: .denied)
+		sut.locationManagerDidChangeAuthorization(CLLocationManager())
+		XCTAssertTrue(sut.isAuthorisationDenied)
+		mockCLLocationManager.authorizationStatus = .authorizedWhenInUse
+
+		// When
+		sut.locationManagerDidChangeAuthorization(CLLocationManager())
+
+		// Then
+		XCTAssertFalse(sut.isAuthorisationDenied)
+		XCTAssertEqual(mockCLLocationManager.requestLocationCallCount, 1)
+		XCTAssertTrue(sut.isRequestingLocation)
 	}
 
 	func testLocationManagerDidChangeAuthorization_whenAuthorisedWithoutPriorRequest_doesNotRequestLocation() {

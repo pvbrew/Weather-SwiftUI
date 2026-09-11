@@ -19,6 +19,7 @@ final class LocationManager: NSObject, ObservableObject {
 	private var manager: CLLocationManageable
 	private var hasRetriedAfterLocationUnknown = false
 	private var isWaitingForAuthorisationToRequestLocation = false
+	private var lastKnownAuthorisationStatus: CLAuthorizationStatus?
 	
 	init(manager: CLLocationManageable = CLLocationManager()) {
 		self.manager = manager
@@ -48,16 +49,23 @@ final class LocationManager: NSObject, ObservableObject {
 	}
 
 	private func handle(status: CLAuthorizationStatus) {
+		defer { lastKnownAuthorisationStatus = status }
+
 		switch status {
 		case .authorizedAlways, .authorizedWhenInUse:
 			isAuthorisationDenied = false
 			if isWaitingForAuthorisationToRequestLocation {
 				isWaitingForAuthorisationToRequestLocation = false
 				requestLocation()
+			} else if lastKnownAuthorisationStatus == .denied || lastKnownAuthorisationStatus == .restricted {
+				// Access was just re-granted from Settings - fetch a fresh location,
+				// since nothing else automatically retries after a denial.
+				requestLocation()
 			}
 		case .denied, .restricted:
 			isAuthorisationDenied = true
 			isWaitingForAuthorisationToRequestLocation = false
+			errorAccessingLocation = nil
 		case .notDetermined:
 			manager.requestWhenInUseAuthorization()
 		@unknown default:
