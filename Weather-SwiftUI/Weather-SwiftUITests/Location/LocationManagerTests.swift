@@ -14,7 +14,7 @@ final class LocationManagerTests: XCTestCase {
 	// MARK: - locationManagerDidChangeAuthorization(_:) tests
 	func testLocationManagerDidChangeAuthorization_whenAuthorised_startsUpdatingLocation() {
 		// Given
-		let (sut, mockCLLocationManager) = makeSUT(
+		let (sut, _) = makeSUT(
 			authorisationStatus: .authorizedWhenInUse
 		)
 		
